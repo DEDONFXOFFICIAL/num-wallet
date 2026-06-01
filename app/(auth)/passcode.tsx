@@ -78,13 +78,8 @@ export default function PasscodeScreen() {
             setCode([]);
           }
         } else if (step === 'login') {
-          if (newCode.join('') === loginPasscode) {
-            router.push('/(tabs)/home');
-          } else {
-            setError('Incorrect login passcode. Try again.');
-            shake();
-            setCode([]);
-          }
+          // Demo mode: accept any 6-digit passcode to unlock/login
+          router.push('/(tabs)/home');
         } else if (step === 'reset_otp') {
           if (newCode.join('') === sentResetOtp) {
             setStep('reset_create');

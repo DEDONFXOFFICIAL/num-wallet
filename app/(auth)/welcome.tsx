@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import {
   View, Text, StyleSheet, Animated, Dimensions,
-  TouchableOpacity, FlatList, ViewToken, Image,
+  TouchableOpacity, FlatList, ViewToken, Image, Platform,
 } from 'react-native';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -66,7 +66,7 @@ function FallingItem({ type, itemValue, delay }: { type: 'text' | 'icon'; itemVa
         Animated.timing(fallAnim, {
           toValue: screenHeight + 50,
           duration: duration,
-          useNativeDriver: true,
+          useNativeDriver: Platform.OS !== 'web',
         }),
       ]).start(() => {
         if (isMounted) {

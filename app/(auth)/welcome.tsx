@@ -139,7 +139,7 @@ function Slide({ item, width }: { item: typeof SLIDES[0]; width: number }) {
   }
 
   return (
-    <View style={[styles.slide, { width }]}>
+    <View style={[styles.slide, { width, height: Platform.OS === 'web' ? '100%' : undefined }]}>
       {/* Soft falling sketches background */}
       <FallingBackground type={bgType} items={bgItems} />
 
@@ -176,6 +176,12 @@ export default function WelcomeScreen() {
   const [containerWidth, setContainerWidth] = useState(Dimensions.get('window').width);
   const flatRef = useRef<FlatList>(null);
 
+  const getItemLayout = (_: any, index: number) => ({
+    length: containerWidth,
+    offset: containerWidth * index,
+    index,
+  });
+
   const onViewRef = useRef(({ viewableItems }: { viewableItems: ViewToken[] }) => {
     if (viewableItems[0]) {
       setActiveIndex(viewableItems[0].index ?? 0);
@@ -184,7 +190,9 @@ export default function WelcomeScreen() {
 
   const handleNext = () => {
     if (activeIndex < SLIDES.length - 1) {
-      flatRef.current?.scrollToIndex({ index: activeIndex + 1, animated: true });
+      const nextIdx = activeIndex + 1;
+      setActiveIndex(nextIdx);
+      flatRef.current?.scrollToIndex({ index: nextIdx, animated: true });
     } else {
       router.push('/(auth)/phone');
     }
@@ -223,6 +231,8 @@ export default function WelcomeScreen() {
         onViewableItemsChanged={onViewRef.current}
         viewabilityConfig={{ itemVisiblePercentThreshold: 50 }}
         style={styles.slider}
+        contentContainerStyle={{ flexGrow: 1, height: Platform.OS === 'web' ? '100%' : undefined }}
+        getItemLayout={getItemLayout}
       />
 
       {/* Bottom area */}

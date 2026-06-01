@@ -43,7 +43,7 @@ function FallingItem({ type, itemValue, delay }: { type: 'text' | 'icon'; itemVa
   const screenHeight = Dimensions.get('window').height;
   const screenWidth = Dimensions.get('window').width;
 
-  const leftPos = useRef(Math.random() * (screenWidth - 80) + 10).current;
+  const leftPos = useRef(Math.random() * (Math.min(screenWidth, 380) - 80) + 10).current;
   const scale = useRef(Math.random() * 0.4 + 0.6).current;
   const opacity = useRef(
     type === 'text' 
@@ -123,7 +123,7 @@ function FallingBackground({ type, items }: { type: 'text' | 'icon'; items: stri
   );
 }
 
-function Slide({ item }: { item: typeof SLIDES[0] }) {
+function Slide({ item, width }: { item: typeof SLIDES[0]; width: number }) {
   let bgType: 'text' | 'icon' = 'text';
   let bgItems: string[] = [];
 
@@ -173,6 +173,7 @@ function Slide({ item }: { item: typeof SLIDES[0] }) {
 
 export default function WelcomeScreen() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [containerWidth, setContainerWidth] = useState(Dimensions.get('window').width);
   const flatRef = useRef<FlatList>(null);
 
   const onViewRef = useRef(({ viewableItems }: { viewableItems: ViewToken[] }) => {
@@ -194,7 +195,15 @@ export default function WelcomeScreen() {
   const isLast = activeIndex === SLIDES.length - 1;
 
   return (
-    <View style={styles.container}>
+    <View 
+      style={styles.container}
+      onLayout={(e) => {
+        const { width } = e.nativeEvent.layout;
+        if (width > 0) {
+          setContainerWidth(width);
+        }
+      }}
+    >
       {/* Skip */}
       {!isLast && (
         <TouchableOpacity style={styles.skip} onPress={handleSkip}>
@@ -207,7 +216,7 @@ export default function WelcomeScreen() {
         ref={flatRef}
         data={SLIDES}
         keyExtractor={(i) => i.id}
-        renderItem={({ item }) => <Slide item={item} />}
+        renderItem={({ item }) => <Slide item={item} width={containerWidth} />}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
@@ -237,7 +246,7 @@ export default function WelcomeScreen() {
             colors={[Colors.brand.deep, Colors.brand.bright]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
-            style={styles.ctaBtn}
+            style={[styles.ctaBtn, { width: containerWidth - Spacing[10] }]}
           >
             <Text style={styles.ctaBtnText}>
               {isLast ? 'Get Started' : 'Next'}

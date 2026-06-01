@@ -7,7 +7,7 @@ import { Platform, View, StyleSheet, useWindowDimensions } from 'react-native';
 
 export default function RootLayout() {
   const { width: windowWidth } = useWindowDimensions();
-  const isLargeScreen = Platform.OS === 'web' && windowWidth > 500;
+  const isLargeScreen = Platform.OS === 'web' && windowWidth > 768;
 
   return (
     <GestureHandlerRootView style={{ flex: 1, backgroundColor: '#05050A' }}>

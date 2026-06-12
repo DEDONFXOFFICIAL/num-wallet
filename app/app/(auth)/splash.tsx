@@ -79,7 +79,7 @@ export default function SplashScreen() {
       {/* Logo mark */}
       <Animated.View style={[styles.logoWrap, { opacity: logoOpacity, transform: [{ scale: logoScale }] }]}>
         <Image
-          source={require('../../assets/logo.jpg')}
+          source={require('../../logo/logo.png')}
           style={styles.logoImage}
           resizeMode="contain"
         />

@@ -2087,7 +2087,7 @@ export default function HubScreen() {
           <View style={[styles.header, borderStyle, { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }]}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing[2] }}>
               <Image
-                source={require('../../assets/logo.jpg')}
+                source={require('../../logo/logo.png')}
                 style={styles.headerLogo}
                 resizeMode="contain"
               />

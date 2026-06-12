@@ -147,7 +147,7 @@ function Slide({ item, width }: { item: typeof SLIDES[0]; width: number }) {
       {item.useLogo ? (
         <View style={[styles.iconCard, { backgroundColor: Colors.bg.base, borderColor: '#C4D4E820', zIndex: 10 }]}>
           <Image
-            source={require('../../assets/logo.jpg')}
+            source={require('../../logo/logo.png')}
             style={styles.logoImage}
             resizeMode="contain"
           />

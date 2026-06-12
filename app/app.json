@@ -4,11 +4,11 @@
     "slug": "num-wallet",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./logo/icon.png",
     "userInterfaceStyle": "dark",
     "scheme": "numwallet",
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./logo/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#050A0E"
     },
@@ -20,7 +20,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/android-icon-foreground.png",
+        "foregroundImage": "./logo/icon.png",
         "backgroundColor": "#050A0E"
       },
       "package": "app.numwallet",

@@ -523,26 +523,26 @@ export function getLogoSource(logoPath: any) {
     
     // Custom overrides for Asset Chain and Klever Chain new local logos
     if (lower.includes('xrwa')) {
-      return require('../assets/xrwa.png');
+      return require('../logo/xrwa.png');
     }
     if (lower.includes('assetchain') || lower.includes('rwa') || lower.includes('xend.png')) {
-      return require('../assets/assetchain.png');
+      return require('../logo/assetchain.png');
     }
     if (lower.includes('klever') || lower.includes('klv') || lower.includes('klever.png')) {
-      return require('../assets/klever.png');
+      return require('../logo/klever.png');
     }
     
     // If it's a web URL (starts with http/https)
     if (logoPath.startsWith('http://') || logoPath.startsWith('https://') || logoPath.startsWith('//')) {
       // Only apply local chain logo overrides if it's explicitly the native chain info logo
       if (lower.includes('/blockchains/base/info/') || lower.endsWith('/base/info/logo.png')) {
-        return require('../assets/base.png');
+        return require('../logo/base.png');
       }
       if (lower.includes('/blockchains/ton/info/') || lower.endsWith('/ton/info/logo.png')) {
-        return require('../assets/ton.png');
+        return require('../logo/ton.png');
       }
       if (lower.includes('/blockchains/ripple/info/') || lower.includes('/blockchains/xrp/info/') || lower.endsWith('/ripple/info/logo.png')) {
-        return require('../assets/xrp.png');
+        return require('../logo/xrp.png');
       }
       
       // Manual high-resolution PNG overrides for new/specific platforms
@@ -619,13 +619,13 @@ export function getLogoSource(logoPath: any) {
 
     // Non-URL local string keys mapping (e.g. if the developer passed "base", "ton", "xrp")
     if (lower === 'base') {
-      return require('../assets/base.png');
+      return require('../logo/base.png');
     }
     if (lower === 'ton' || lower === 'theopennetwork') {
-      return require('../assets/ton.png');
+      return require('../logo/ton.png');
     }
     if (lower === 'ripple' || lower === 'xrp') {
-      return require('../assets/xrp.png');
+      return require('../logo/xrp.png');
     }
 
     return { uri: logoPath };

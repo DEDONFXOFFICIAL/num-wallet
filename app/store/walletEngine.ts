@@ -225,7 +225,7 @@ const TOP_TOKENS_PER_EVM: Record<number, { symbol: string; name: string; address
     { symbol: 'USDC', name: 'USD Coin', address: '0xB97EF154c8E493685857F0E44128354a3F68d607', logo: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanchec/assets/0xB97EF154c8E493685857F0E44128354a3F68d607/logo.png' }
   ],
   42420: [
-    { symbol: 'XRWA', name: 'Xend Finance', address: '0x02afe9989D86a0357fbb238579FE035dc17BcAB0', logo: 'assets/xrwa.png' },
+    { symbol: 'XRWA', name: 'Xend Finance', address: '0x02afe9989D86a0357fbb238579FE035dc17BcAB0', logo: 'logo/xrwa.png' },
     { symbol: 'CNGN', name: 'Compliant Naira', address: '0x7923C0f6FA3d1BA6EAFCAedAaD93e737Fd22FC4F', logo: 'https://assets.coingecko.com/coins/images/69200/standard/cNGN_Logo_Icon_Purple.png' },
     { symbol: 'USDC', name: 'USD Coin (Bridged)', address: '0x39C6b75fAeAb6B54541BE34860AE6250263377e9', logo: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xa0b86991c6218b36c1d19D4a2e9eb0CE3606eb48/logo.png' },
     { symbol: 'USDT', name: 'Tether USD', address: '0x26E490d30e73c36800788DC6d6315946C4BbEa24', logo: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png' },
@@ -662,7 +662,7 @@ export const WalletEngine = {
         }
 
         // 1. Fetch native token balance
-        let provider;
+        let provider: any;
         let nativeBalStr = '0.0000';
         try {
           provider = await getEvmProviderForChain(evmId);

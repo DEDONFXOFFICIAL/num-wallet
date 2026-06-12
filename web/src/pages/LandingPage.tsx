@@ -38,13 +38,13 @@ export default function LandingPage() {
   const [showAboutModal, setShowAboutModal] = useState(false);
   const [activeFlowTab, setActiveFlowTab] = useState<'onboarding' | 'transacting' | 'converting' | 'nfts'>('onboarding');
 
-  // Toggle theme class on the body element
+  // Toggle theme class on the root HTML element
   useEffect(() => {
     if (isLightMode) {
-      document.body.classList.add('light-theme');
+      document.documentElement.classList.add('light-theme');
       localStorage.setItem('theme', 'light');
     } else {
-      document.body.classList.remove('light-theme');
+      document.documentElement.classList.remove('light-theme');
       localStorage.setItem('theme', 'dark');
     }
   }, [isLightMode]);

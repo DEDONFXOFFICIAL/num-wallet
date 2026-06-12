@@ -11,11 +11,27 @@
       "distribution": "internal",
       "android": {
         "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_SUPABASE_URL": "https://giznbbrfbnsxflfsmefr.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdpem5iYnJmYm5zeGZsZnNtZWZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0MDE3MTcsImV4cCI6MjA5NTk3NzcxN30.4hTLxGLqCYoPElYSv0ewKQx9GW49pgthzKe3Mvcd0qY",
+        "EXPO_PUBLIC_PRIVY_APP_ID": "cmpwophid000r0djp5d9wqxv5",
+        "EXPO_PUBLIC_PRIVY_CLIENT_ID": "client-WY6Zbde9pCMefM8FKcarAgsEfeMtPgHWWdhUk2FXY91Uk",
+        "EXPO_PUBLIC_SOLANA_RPC_URL": "https://mainnet.helius-rpc.com/?api-key=885ec26a-ce0c-4295-be91-d98702b14db5",
+        "EXPO_PUBLIC_EVM_RPC_URL": "https://rpc.ankr.com/eth"
       }
     },
     "production": {
       "ios": {
         "simulator": false
+      },
+      "env": {
+        "EXPO_PUBLIC_SUPABASE_URL": "https://giznbbrfbnsxflfsmefr.supabase.co",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdpem5iYnJmYm5zeGZsZnNtZWZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0MDE3MTcsImV4cCI6MjA5NTk3NzcxN30.4hTLxGLqCYoPElYSv0ewKQx9GW49pgthzKe3Mvcd0qY",
+        "EXPO_PUBLIC_PRIVY_APP_ID": "cmpwophid000r0djp5d9wqxv5",
+        "EXPO_PUBLIC_PRIVY_CLIENT_ID": "client-WY6Zbde9pCMefM8FKcarAgsEfeMtPgHWWdhUk2FXY91Uk",
+        "EXPO_PUBLIC_SOLANA_RPC_URL": "https://mainnet.helius-rpc.com/?api-key=885ec26a-ce0c-4295-be91-d98702b14db5",
+        "EXPO_PUBLIC_EVM_RPC_URL": "https://rpc.ankr.com/eth"
       }
     }
   },

@@ -44,7 +44,7 @@ const BLOCKCHAINS_LIST = [
   {
     id: 'ton',
     name: 'TON',
-    logos: [require('../../assets/ton.png')],
+    logos: [require('../../logo/ton.png')],
     address: 'EQD454q9l5scs7l8scs7l5scs7l8scs7l9scs7l8s-ton',
     type: 'non-evm',
     isEvmGroup: false,
@@ -71,7 +71,7 @@ const BLOCKCHAINS_LIST = [
   {
     id: 'xrp',
     name: 'Ripple',
-    logos: [require('../../assets/xrp.png')],
+    logos: [require('../../logo/xrp.png')],
     address: 'rEb8t6aQ8idbg4YGgwgEGVWoVKSaEtJLbi',
     type: 'non-evm',
     isEvmGroup: false,
@@ -238,7 +238,7 @@ export default function ReceiveScreen() {
           <View style={cardStyle}>
             <View style={styles.qrHeader}>
               <Image
-                source={require('../../assets/logo.jpg')}
+                source={require('../../logo/logo.png')}
                 style={styles.qrLogo}
                 resizeMode="contain"
               />
@@ -272,7 +272,7 @@ export default function ReceiveScreen() {
                   {/* Center badge */}
                   <View style={styles.qrCenterBadge}>
                     <Image
-                      source={require('../../assets/logo.jpg')}
+                      source={require('../../logo/logo.png')}
                       style={styles.qrCenterLogo}
                       resizeMode="contain"
                     />

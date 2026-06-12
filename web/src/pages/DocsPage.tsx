@@ -5,7 +5,7 @@ import { Glass3DCanvas } from '../components/Glass3DCanvas';
 
 export default function DocsPage() {
   const [activeSection, setActiveSection] = useState('welcome');
-  const [isLightMode] = useState(() => localStorage.getItem('theme') === 'light' || document.body.classList.contains('light-theme'));
+  const [isLightMode] = useState(() => localStorage.getItem('theme') === 'light' || document.documentElement.classList.contains('light-theme'));
 
   const sections = [
     { id: 'welcome', label: 'Welcome to Num Docs', icon: Book },

@@ -240,7 +240,7 @@ function BalanceCards({ onPressFund }: { onPressFund: () => void }) {
         <View style={[styles.cardTopRow, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: Spacing[4] }]}>
           <View style={styles.cardBrandContainer}>
             <Image
-              source={require('../../assets/logo.jpg')}
+              source={require('../../logo/logo.png')}
               style={styles.cardLogo as any}
               resizeMode="contain"
             />

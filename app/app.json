@@ -33,6 +33,13 @@
       "expo-secure-store",
       "expo-web-browser",
       "expo-mail-composer"
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "edd21caa-7e01-4cc1-99f9-a8c25ac36e6b"
+      }
+    },
+    "owner": "dedonfxofficial"
   }
 }

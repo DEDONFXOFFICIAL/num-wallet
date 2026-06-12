@@ -20,6 +20,12 @@ if (process.env.NODE_ENV === 'production' || process.env.EAS_BUILD === 'true') {
         result = bundle.build(entryPoint, preModules, graph, options);
       }
 
+      // Skip obfuscation on Web to avoid breaking reflection/decorators in Web3/Privy SDKs
+      const isWebBuild = options.platform === 'web' || process.argv.includes('web');
+      if (isWebBuild) {
+        return result;
+      }
+
       let code = typeof result === 'string' ? result : result.code;
 
       const JavaScriptObfuscator = require('javascript-obfuscator');

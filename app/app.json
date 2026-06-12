@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "Num Wallet",
+    "slug": "num-wallet",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "scheme": "numwallet",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#050A0E"
+    },
+    "jsEngine": "hermes",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "app.numwallet",
+      "jsEngine": "hermes"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundColor": "#050A0E"
+      },
+      "package": "app.numwallet",
+      "jsEngine": "hermes",
+      "enableProguardInReleaseBuilds": true
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-secure-store",
+      "expo-web-browser",
+      "expo-mail-composer"
+    ]
+  }
+}

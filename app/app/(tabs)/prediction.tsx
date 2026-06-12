@@ -107,7 +107,7 @@ export default function PredictionScreen() {
                   <Image
                     source={{ uri: item.icon_url }}
                     style={styles.itemLogo}
-                    defaultSource={require('../../assets/icon.png')} // Fallback image asset
+                    defaultSource={require('../../logo/icon.png')} // Fallback image asset
                   />
                   <View style={styles.itemInfo}>
                     <Text style={[styles.itemTitle, isDarkMode ? styles.textWhite : styles.textLightPrimary]}>

@@ -6,7 +6,7 @@ const config = getDefaultConfig(__dirname);
 config.resolver.unstable_enablePackageExports = false;
 
 // Production Obfuscation custom serializer
-if (process.env.NODE_ENV === 'production' || process.env.EAS_BUILD === 'true') {
+if (process.env.EAS_BUILD_PROFILE === 'production') {
   const originalSerializer = config.serializer?.customSerializer;
 
   config.serializer = {

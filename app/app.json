@@ -7,32 +7,32 @@
     "icon": "./logo/icon.png",
     "userInterfaceStyle": "dark",
     "scheme": "numwallet",
-    "splash": {
-      "image": "./logo/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#050A0E"
-    },
-    "jsEngine": "hermes",
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "app.numwallet",
-      "jsEngine": "hermes"
+      "bundleIdentifier": "app.numwallet"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./logo/icon.png",
         "backgroundColor": "#050A0E"
       },
-      "package": "app.numwallet",
-      "jsEngine": "hermes",
-      "enableProguardInReleaseBuilds": true
+      "package": "app.numwallet"
     },
     "plugins": [
       "expo-router",
       "expo-font",
       "expo-secure-store",
       "expo-web-browser",
-      "expo-mail-composer"
+      "expo-mail-composer",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./logo/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#050A0E"
+        }
+      ]
     ],
     "extra": {
       "router": {},

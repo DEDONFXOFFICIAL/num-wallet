@@ -661,7 +661,13 @@ export const WebacyService = {
 
     const totalHoldersCount = parseInt(gpData.holder_count || '120');
 
-    const sniperCount = Math.max(0, Math.floor((parseInt(tokenAddress.substring(3, 7), 16) % 8)));
+    // Safe character-code sum to hash any address (hex or base58) without returning NaN
+    let addressValue = 0;
+    const cleanAddr = tokenAddress || '';
+    for (let i = 0; i < cleanAddr.length; i++) {
+      addressValue += cleanAddr.charCodeAt(i);
+    }
+    const sniperCount = addressValue % 8;
     const bundlerCount = Math.max(0, Math.floor(sniperCount / 2));
     
     return {

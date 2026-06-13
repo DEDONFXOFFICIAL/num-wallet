@@ -2370,12 +2370,31 @@ export default function ConvertScreen() {
                   </View>
                 ) : (
                   <View style={{ gap: 12 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <Text style={{ fontSize: 11, fontWeight: '700', color: Colors.text.muted }}>Security Rating</Text>
-                      <Text style={{ fontSize: 13, fontWeight: '900', color: tokenRisk.overallRisk > 70 ? '#EF4444' : tokenRisk.overallRisk > 40 ? '#F59E0B' : '#10B981' }}>
-                        {100 - tokenRisk.overallRisk}/100 ({tokenRisk.overallRisk > 70 ? 'High Risk' : tokenRisk.overallRisk > 40 ? 'Medium Risk' : 'Low Risk'})
-                      </Text>
-                    </View>
+                    {(() => {
+                      let unifiedRisk = tokenRisk.overallRisk || 0;
+                      if (holderAnalysis) {
+                        if (holderAnalysis.top10Concentration > 80) {
+                          unifiedRisk = Math.max(unifiedRisk, 75);
+                        } else if (holderAnalysis.top10Concentration > 60) {
+                          unifiedRisk = Math.max(unifiedRisk, 45);
+                        }
+                        if (holderAnalysis.sniperCount > 3 || holderAnalysis.isCoordinatedBuy) {
+                          unifiedRisk = Math.max(unifiedRisk, 40);
+                        }
+                      }
+                      const score = Math.max(0, 100 - unifiedRisk);
+                      const statusText = score < 30 ? 'High Risk' : score < 60 ? 'Medium Risk' : 'Low Risk';
+                      const statusColor = score < 30 ? '#EF4444' : score < 60 ? '#F59E0B' : '#10B981';
+                      
+                      return (
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                          <Text style={{ fontSize: 11, fontWeight: '700', color: Colors.text.muted }}>Security Rating</Text>
+                          <Text style={{ fontSize: 13, fontWeight: '900', color: statusColor }}>
+                            {score}/100 ({statusText})
+                          </Text>
+                        </View>
+                      );
+                    })()}
 
                     <View style={styles.webacyGrid}>
                       <View style={styles.webacyGridItem}>

@@ -2363,10 +2363,12 @@ body, header, footer, section, div, .bento-card, .compliance-card, a, button, .s
 }
 
 .steps-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  justify-content: center;
   gap: 24px;
+  flex-wrap: wrap;
   margin-top: 48px;
+  width: 100%;
 }
 
 .step-card {
@@ -2380,6 +2382,9 @@ body, header, footer, section, div, .bento-card, .compliance-card, a, button, .s
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
+  flex: 1;
+  min-width: 280px;
+  max-width: 340px;
 }
 
 .step-card:hover {

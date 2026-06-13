@@ -5,7 +5,7 @@ import {
   Terminal, Sun, Moon, HelpCircle,
   Phone, Lock, Star,
   RefreshCw, Shuffle, Image, EyeOff,
-  ChevronLeft, ChevronRight
+  Mail
 } from 'lucide-react';
 import { Glass3DCanvas } from '../components/Glass3DCanvas';
 
@@ -115,12 +115,7 @@ export default function LandingPage() {
   });
   const [showAboutModal, setShowAboutModal] = useState(false);
   const [activeFlowTab, setActiveFlowTab] = useState<'onboarding' | 'transacting' | 'converting' | 'nfts'>('onboarding');
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
-  // Whenever activeFlowTab changes, reset currentStepIndex to 0
-  useEffect(() => {
-    setCurrentStepIndex(0);
-  }, [activeFlowTab]);
 
   // Toggle theme class on the root HTML element
   useEffect(() => {
@@ -363,60 +358,23 @@ export default function LandingPage() {
         </div>
 
         {/* Tab contents */}
-        {(() => {
-          const steps = FLOW_STEPS[activeFlowTab];
-          const currentStep = steps[currentStepIndex] || steps[0];
-          const StepIcon = currentStep.icon;
-          return (
-            <div className="reveal-fade" key={`${activeFlowTab}-${currentStepIndex}`}>
-              <div className="centered-step-container">
-                {/* Navigation Arrow Left */}
-                <button 
-                  className="step-nav-arrow left"
-                  onClick={() => setCurrentStepIndex(prev => Math.max(0, prev - 1))}
-                  disabled={currentStepIndex === 0}
-                  aria-label="Previous step"
-                >
-                  <ChevronLeft size={24} />
-                </button>
-
-                {/* The Big Centered Card */}
-                <div className="step-card big-centered">
-                  <span className="step-badge">{currentStep.badge}</span>
-                  <div className="step-icon-wrap big-icon">
-                    <StepIcon size={36} />
-                  </div>
-                  <div className="step-body centered-body">
-                    <h3>{currentStep.title}</h3>
-                    <p>{currentStep.description}</p>
-                  </div>
+        <div className="steps-grid reveal-fade" key={activeFlowTab}>
+          {FLOW_STEPS[activeFlowTab].map((step, index) => {
+            const StepIcon = step.icon;
+            return (
+              <div className="step-card" key={index}>
+                <span className="step-badge">{step.badge}</span>
+                <div className="step-icon-wrap">
+                  <StepIcon size={24} />
                 </div>
-
-                {/* Navigation Arrow Right */}
-                <button 
-                  className="step-nav-arrow right"
-                  onClick={() => setCurrentStepIndex(prev => Math.min(steps.length - 1, prev + 1))}
-                  disabled={currentStepIndex === steps.length - 1}
-                  aria-label="Next step"
-                >
-                  <ChevronRight size={24} />
-                </button>
+                <div className="step-body">
+                  <h3>{step.title}</h3>
+                  <p>{step.description}</p>
+                </div>
               </div>
-
-              {/* Step Indicator Dots */}
-              <div className="step-dots">
-                {steps.map((_, idx) => (
-                  <button
-                    key={idx}
-                    className={`step-dot-btn ${idx === currentStepIndex ? 'active' : ''}`}
-                    onClick={() => setCurrentStepIndex(idx)}
-                    aria-label={`Go to step ${idx + 1}`}
-                  />
-                ))}
-              </div>
-            </div>
-          );
-        })()}
+            );
+          })}
+        </div>
       </section>
 
       {/* Credibility & Compliance Section */}
@@ -486,15 +444,15 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Card 2: Gas Shortfall Interception */}
+          {/* Card 2: Offline Recovery Backup */}
           <div className="bento-card">
             <div className="bento-icon-box">
-              <Zap size={22} color="var(--primary)" />
+              <Mail size={22} color="var(--primary)" />
             </div>
             <div className="bento-body">
-              <h3>Gas Shortfall Interception</h3>
+              <h3>Secure Offline Recovery</h3>
               <p>
-                Num Wallet intercepts transactions before they fail due to "insufficient gas," alerting you to deposit native gas tokens to your backing address, preventing wasted network fee failures.
+                Backup your Privy MPC private key splits via an AES-256 encrypted HTML file emailed directly to your backup Gmail. Decryptable only with your secure 4-digit Transaction PIN, keeping your keys completely offline.
               </p>
             </div>
           </div>

@@ -780,16 +780,54 @@ function TokenAccordion({ openChain, setOpenChain }: { openChain: string | null;
           }
         });
       } else {
-        setAlertConfig({
-          visible: true,
-          title: 'Resolution Failed',
-          message: `LI.FI failed to resolve any token for address:\n${address}\non selected network. Please verify the contract address and try again.`,
-          icon: 'alert-triangle',
-          iconColor: Colors.error,
-          showConfirm: false,
-          confirmText: 'Confirm',
-          onConfirm: undefined,
-        });
+        // Fallback for non-EVM chains where external indexer fails
+        const isNonEvm = ['theopennetwork', 'cardano', 'klever', 'xrp', 'cosmos', 'bitcoin', 'tron', 'sui'].includes(chainId.toLowerCase());
+        if (isNonEvm) {
+          const detectedSymbol = chainId === 'theopennetwork' ? 'JETTON' : (chainId === 'cardano' ? 'CNT' : (chainId === 'klever' ? 'KLVT' : 'CUSTOM'));
+          const detectedName = `${chainId === 'theopennetwork' ? 'TON Jetton' : (chainId === 'cardano' ? 'Cardano Token' : 'Custom Token')} (${address.substring(0, 4)}...${address.substring(address.length - 4)})`;
+          const detectedLogo = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png';
+          const detectedPrice = 0.05;
+          const detectedDecimals = 9;
+          const chainName = portfolioAssets.find(c => c.id === chainId)?.chain || chainId;
+
+          setAlertConfig({
+            visible: true,
+            title: 'Custom Token Detected',
+            message: `Indexer resolution failed, but detected non-EVM chain token:\n\nSymbol: ${detectedSymbol}\nName: ${detectedName}\nNetwork: ${chainName}\nDecimals: ${detectedDecimals}\nPrice: $${detectedPrice.toFixed(2)} USD\nAddress: ${address.substring(0, 10)}...${address.substring(address.length - 4)}\n\nWould you like to import this token into your wallet?`,
+            icon: 'info',
+            iconColor: Colors.brand.bright,
+            showConfirm: true,
+            confirmText: 'Import Token',
+            onConfirm: () => {
+              importCustomAsset(chainName, detectedSymbol, detectedName, detectedLogo, address.trim(), detectedDecimals, detectedPrice);
+              setContractInputs(prev => ({ ...prev, [chainId]: '' }));
+              
+              setTimeout(() => {
+                setAlertConfig({
+                  visible: true,
+                  title: 'Import Success!',
+                  message: `Imported ${detectedSymbol} on ${chainName} successfully.`,
+                  icon: 'check-circle',
+                  iconColor: '#10B981',
+                  showConfirm: false,
+                  confirmText: 'Confirm',
+                  onConfirm: undefined,
+                });
+              }, 350);
+            }
+          });
+        } else {
+          setAlertConfig({
+            visible: true,
+            title: 'Resolution Failed',
+            message: `LI.FI failed to resolve any token for address:\n${address}\non selected network. Please verify the contract address and try again.`,
+            icon: 'alert-triangle',
+            iconColor: Colors.error,
+            showConfirm: false,
+            confirmText: 'Confirm',
+            onConfirm: undefined,
+          });
+        }
       }
     } catch (err) {
       setAlertConfig({

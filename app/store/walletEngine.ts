@@ -168,7 +168,9 @@ const COINGECKO_MAP: Record<string, string> = {
   'cosmos': 'ATOM',
   'bitcoin': 'BTC',
   'xend-finance': 'XRWA',
-  'compliant-naira': 'CNGN'
+  'compliant-naira': 'CNGN',
+  'tether': 'USDT',
+  'usd-coin': 'USDC'
 };
 
 export const EVM_SWAP_ROUTERS: Record<number, string> = {
@@ -510,7 +512,9 @@ export const WalletEngine = {
       ATOM: 0,
       BTC: 0,
       RWA: 0,
-      XRWA: 0
+      XRWA: 0,
+      USDT: 0,
+      USDC: 0
     };
 
     // 1. Fetch native prices in parallel (from CoinGecko simple price bulk query)
@@ -863,7 +867,9 @@ export const WalletEngine = {
       ATOM: 0,
       BTC: 0,
       RWA: 0,
-      XRWA: 0
+      XRWA: 0,
+      USDT: 0,
+      USDC: 0
     };
 
     const coinGeckoIds = Object.keys(COINGECKO_MAP).join(',');

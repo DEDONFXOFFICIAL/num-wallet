@@ -447,7 +447,7 @@ export default function SendScreen() {
   const holdingsList = useMemo(() => {
     return filteredTokens.filter(t => {
       const balanceNum = parseFloat(t.balance) || 0;
-      return balanceNum > 0 || (t.address && t.address.trim().length > 0);
+      return balanceNum > 0;
     });
   }, [filteredTokens]);
 

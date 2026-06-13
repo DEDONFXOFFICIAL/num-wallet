@@ -295,12 +295,7 @@ export const useUserStore = create<UserState>()(
       showDsocials: true,
       showPrediction: true,
       showAi: true,
-      bookmarkedDapps: [
-        { name: 'Jupiter', url: 'jup.ag' },
-        { name: 'Magic Eden', url: 'magiceden.io' },
-        { name: 'Raydium', url: 'raydium.io' },
-        { name: 'Orca', url: 'orca.so' }
-      ],
+      bookmarkedDapps: [],
       minimizedTabs: [],
       backupEmail: null,
       hasEmailedSeedPhrase: false,
@@ -433,7 +428,7 @@ export const useUserStore = create<UserState>()(
     {
       name: 'num-wallet-user-store',
       storage: createJSONStorage(() => AsyncStorage),
-      version: 7,
+      version: 8,
       migrate: (persistedState: any, version: number) => {
         const state = persistedState as any;
         if (version < 2) {
@@ -519,6 +514,11 @@ export const useUserStore = create<UserState>()(
               state.loginPasscode = '123456';
               state.transactionPin = '1234';
             }
+          }
+        }
+        if (version < 8) {
+          if (state) {
+            state.bookmarkedDapps = [];
           }
         }
         return persistedState;

@@ -13,7 +13,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./logo/icon.png",
+        "foregroundImage": "./logo/android-icon-foreground.png",
         "backgroundColor": "#050A0E"
       },
       "package": "app.numwallet"

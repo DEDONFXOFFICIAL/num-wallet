@@ -11,6 +11,7 @@ import { useUserStore } from '../../store/userStore';
 import CustomAlert from '../../components/CustomAlert';
 import { SmsService } from '../../store/smsService';
 import { Config } from '../../constants/config';
+import { supabase } from '../../store/supabaseClient';
 
 const LENGTH = 6;
 
@@ -75,7 +76,9 @@ export default function PasscodeScreen() {
 
   const [code, setCode] = useState<string[]>([]);
   const [step, setStep] = useState<'create' | 'confirm' | 'login' | 'reset_otp' | 'reset_create' | 'reset_confirm'>(
-    params.mode === 'login' ? 'login' : 'create'
+    params.mode === 'login' ? 'login' :
+    params.mode === 'reset_passcode' ? 'reset_create' :
+    'create'
   );
   
   const [savedCode, setSavedCode] = useState<string[]>([]);
@@ -294,13 +297,42 @@ export default function PasscodeScreen() {
           setCode([]);
         } else if (step === 'reset_confirm') {
           if (newCode.join('') === tempNewPasscode.join('')) {
-            setLoginPasscode(newCode.join(''));
+            const newPasscodeStr = newCode.join('');
+            setLoginPasscode(newPasscodeStr);
             setError('');
             setCode([]);
+            
+            // Sync with Supabase DB
+            try {
+              await supabase
+                .from('registries')
+                .update({ login_passcode: newPasscodeStr })
+                .eq('account_number', accountNumber);
+            } catch (dbErr) {
+              console.warn('Failed to sync updated passcode to Supabase:', dbErr);
+            }
+
+            // Auto-login and sync profile
+            try {
+              const { data } = await supabase
+                .from('registries')
+                .select('name, avatar_url, backup_email')
+                .eq('account_number', accountNumber)
+                .maybeSingle();
+              if (data) {
+                const store = useUserStore.getState();
+                if (data.name) store.setName(data.name);
+                if (data.avatar_url) store.setUploadedPhotoUri(data.avatar_url);
+                if (data.backup_email) store.setBackupEmail(data.backup_email);
+              }
+            } catch (e) {
+              console.warn('Failed to sync profile on passcode reset login:', e);
+            }
+
             Alert.alert(
               'Passcode Reset Successful',
-              'Your login passcode has been successfully updated. Please log in using your new passcode.',
-              [{ text: 'OK', onPress: () => setStep('login') }]
+              'Your login passcode has been successfully updated.',
+              [{ text: 'Go to Dashboard', onPress: () => router.replace('/(tabs)/home') }]
             );
           } else {
             setError('Codes do not match. Try again.');

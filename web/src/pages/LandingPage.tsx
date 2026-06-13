@@ -4,7 +4,8 @@ import {
   Shield, Key, Cpu, Zap, Download, ExternalLink, 
   Terminal, Sun, Moon, HelpCircle,
   Phone, Lock, Star,
-  RefreshCw, Shuffle, Image, EyeOff
+  RefreshCw, Shuffle, Image, EyeOff,
+  ChevronLeft, ChevronRight
 } from 'lucide-react';
 import { Glass3DCanvas } from '../components/Glass3DCanvas';
 
@@ -31,12 +32,95 @@ const MAJOR_CHAINS = [
   { name: 'Algorand', icon: 'https://cdn.jsdelivr.net/gh/trustwallet/assets@master/blockchains/algorand/info/logo.png' }
 ];
 
+const FLOW_STEPS = {
+  onboarding: [
+    {
+      badge: 'STEP 01',
+      title: 'Input Phone Number',
+      description: 'Enter your 10-digit mobile number to begin the onboarding process. This becomes your permanent routing identity.',
+      icon: Phone
+    },
+    {
+      badge: 'STEP 02',
+      title: 'Receive OTP',
+      description: 'Verify your phone number instantly using the secure One-Time Password (OTP) sent directly to your device.',
+      icon: Lock
+    },
+    {
+      badge: 'STEP 03',
+      title: 'Add Your Name',
+      description: 'Input your name or username to complete the registration process and create your smart wallet profile.',
+      icon: Shield
+    }
+  ],
+  transacting: [
+    {
+      badge: 'STEP 01',
+      title: 'Input Phone Number',
+      description: "Enter the recipient's phone number or choose from your contacts. No need to copy or paste complex public wallet addresses.",
+      icon: Phone
+    },
+    {
+      badge: 'STEP 02',
+      title: 'Enter Amount',
+      description: 'Specify the exact amount of funds or value that you wish to send to the recipient.',
+      icon: Zap
+    },
+    {
+      badge: 'STEP 03',
+      title: 'Select Coin or Token',
+      description: 'Choose the specific cryptocurrency, asset, or token you want the transfer to be completed in.',
+      icon: RefreshCw
+    }
+  ],
+  converting: [
+    {
+      badge: 'STEP 01',
+      title: 'Swap',
+      description: 'Convert between different tokens on the same network instantly with optimal routing and minimal slippage.',
+      icon: RefreshCw
+    },
+    {
+      badge: 'STEP 02',
+      title: 'Bridge',
+      description: 'Move your digital assets across distinct blockchains securely using integrated top-tier bridging protocols.',
+      icon: Shuffle
+    },
+    {
+      badge: 'STEP 03',
+      title: 'Multi-Chain Swap',
+      description: 'Perform cross-chain swaps to convert and transfer assets between different networks in a single transaction.',
+      icon: Cpu
+    }
+  ],
+  nfts: [
+    {
+      badge: 'STEP 01',
+      title: 'Multi-Chain Aggregation',
+      description: 'Scan and view your digital collectibles across EVM, Solana, and other networks concurrently in a unified dashboard.',
+      icon: Image
+    },
+    {
+      badge: 'STEP 02',
+      title: 'Spam & Airdrop Filters',
+      description: 'Automatically screen out copycat tokens, scam airdrop claims, and malicious contract addresses to keep your collection safe.',
+      icon: EyeOff
+    }
+  ]
+};
+
 export default function LandingPage() {
   const [isLightMode, setIsLightMode] = useState(() => {
     return localStorage.getItem('theme') === 'light';
   });
   const [showAboutModal, setShowAboutModal] = useState(false);
   const [activeFlowTab, setActiveFlowTab] = useState<'onboarding' | 'transacting' | 'converting' | 'nfts'>('onboarding');
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+
+  // Whenever activeFlowTab changes, reset currentStepIndex to 0
+  useEffect(() => {
+    setCurrentStepIndex(0);
+  }, [activeFlowTab]);
 
   // Toggle theme class on the root HTML element
   useEffect(() => {
@@ -279,164 +363,60 @@ export default function LandingPage() {
         </div>
 
         {/* Tab contents */}
-        {activeFlowTab === 'onboarding' && (
-          <div className="steps-grid reveal-fade">
-            <div className="step-card">
-              <span className="step-badge">STEP 01</span>
-              <div className="step-icon-wrap">
-                <Phone size={24} />
-              </div>
-              <div className="step-body">
-                <h3>Input Phone Number</h3>
-                <p>
-                  Enter your 10-digit mobile number to begin the onboarding process. This becomes your permanent routing identity.
-                </p>
-              </div>
-            </div>
+        {(() => {
+          const steps = FLOW_STEPS[activeFlowTab];
+          const currentStep = steps[currentStepIndex] || steps[0];
+          const StepIcon = currentStep.icon;
+          return (
+            <div className="reveal-fade" key={`${activeFlowTab}-${currentStepIndex}`}>
+              <div className="centered-step-container">
+                {/* Navigation Arrow Left */}
+                <button 
+                  className="step-nav-arrow left"
+                  onClick={() => setCurrentStepIndex(prev => Math.max(0, prev - 1))}
+                  disabled={currentStepIndex === 0}
+                  aria-label="Previous step"
+                >
+                  <ChevronLeft size={24} />
+                </button>
 
-            <div className="step-card">
-              <span className="step-badge">STEP 02</span>
-              <div className="step-icon-wrap">
-                <Lock size={24} />
-              </div>
-              <div className="step-body">
-                <h3>Receive OTP</h3>
-                <p>
-                  Verify your phone number instantly using the secure One-Time Password (OTP) sent directly to your device.
-                </p>
-              </div>
-            </div>
+                {/* The Big Centered Card */}
+                <div className="step-card big-centered">
+                  <span className="step-badge">{currentStep.badge}</span>
+                  <div className="step-icon-wrap big-icon">
+                    <StepIcon size={36} />
+                  </div>
+                  <div className="step-body centered-body">
+                    <h3>{currentStep.title}</h3>
+                    <p>{currentStep.description}</p>
+                  </div>
+                </div>
 
-            <div className="step-card">
-              <span className="step-badge">STEP 03</span>
-              <div className="step-icon-wrap">
-                <Shield size={24} />
+                {/* Navigation Arrow Right */}
+                <button 
+                  className="step-nav-arrow right"
+                  onClick={() => setCurrentStepIndex(prev => Math.min(steps.length - 1, prev + 1))}
+                  disabled={currentStepIndex === steps.length - 1}
+                  aria-label="Next step"
+                >
+                  <ChevronRight size={24} />
+                </button>
               </div>
-              <div className="step-body">
-                <h3>Add Your Name</h3>
-                <p>
-                  Input your name or username to complete the registration process and create your smart wallet profile.
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
 
-        {activeFlowTab === 'transacting' && (
-          <div className="steps-grid reveal-fade">
-            <div className="step-card">
-              <span className="step-badge">STEP 01</span>
-              <div className="step-icon-wrap">
-                <Phone size={24} />
-              </div>
-              <div className="step-body">
-                <h3>Input Phone Number</h3>
-                <p>
-                  Enter the recipient's phone number or choose from your contacts. No need to copy or paste complex public wallet addresses.
-                </p>
+              {/* Step Indicator Dots */}
+              <div className="step-dots">
+                {steps.map((_, idx) => (
+                  <button
+                    key={idx}
+                    className={`step-dot-btn ${idx === currentStepIndex ? 'active' : ''}`}
+                    onClick={() => setCurrentStepIndex(idx)}
+                    aria-label={`Go to step ${idx + 1}`}
+                  />
+                ))}
               </div>
             </div>
-
-            <div className="step-card">
-              <span className="step-badge">STEP 02</span>
-              <div className="step-icon-wrap">
-                <Zap size={24} />
-              </div>
-              <div className="step-body">
-                <h3>Enter Amount</h3>
-                <p>
-                  Specify the exact amount of funds or value that you wish to send to the recipient.
-                </p>
-              </div>
-            </div>
-
-            <div className="step-card">
-              <span className="step-badge">STEP 03</span>
-              <div className="step-icon-wrap">
-                <RefreshCw size={24} />
-              </div>
-              <div className="step-body">
-                <h3>Select Coin or Token</h3>
-                <p>
-                  Choose the specific cryptocurrency, asset, or token you want the transfer to be completed in.
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {activeFlowTab === 'converting' && (
-          <div className="steps-grid reveal-fade">
-            <div className="step-card">
-              <span className="step-badge">STEP 01</span>
-              <div className="step-icon-wrap">
-                <RefreshCw size={24} />
-              </div>
-              <div className="step-body">
-                <h3>Swap</h3>
-                <p>
-                  Convert between different tokens on the same network instantly with optimal routing and minimal slippage.
-                </p>
-              </div>
-            </div>
-
-            <div className="step-card">
-              <span className="step-badge">STEP 02</span>
-              <div className="step-icon-wrap">
-                <Shuffle size={24} />
-              </div>
-              <div className="step-body">
-                <h3>Bridge</h3>
-                <p>
-                  Move your digital assets across distinct blockchains securely using integrated top-tier bridging protocols.
-                </p>
-              </div>
-            </div>
-
-            <div className="step-card">
-              <span className="step-badge">STEP 03</span>
-              <div className="step-icon-wrap">
-                <Cpu size={24} />
-              </div>
-              <div className="step-body">
-                <h3>Multi-Chain Swap</h3>
-                <p>
-                  Perform cross-chain swaps to convert and transfer assets between different networks in a single transaction.
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {activeFlowTab === 'nfts' && (
-          <div className="steps-grid reveal-fade">
-            <div className="step-card">
-              <span className="step-badge">STEP 01</span>
-              <div className="step-icon-wrap">
-                <Image size={24} />
-              </div>
-              <div className="step-body">
-                <h3>Multi-Chain Aggregation</h3>
-                <p>
-                  Scan and view your digital collectibles across EVM, Solana, and other networks concurrently in a unified dashboard.
-                </p>
-              </div>
-            </div>
-
-            <div className="step-card">
-              <span className="step-badge">STEP 02</span>
-              <div className="step-icon-wrap">
-                <EyeOff size={24} />
-              </div>
-              <div className="step-body">
-                <h3>Spam & Airdrop Filters</h3>
-                <p>
-                  Automatically screen out copycat tokens, scam airdrop claims, and malicious contract addresses to keep your collection safe.
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
+          );
+        })()}
       </section>
 
       {/* Credibility & Compliance Section */}

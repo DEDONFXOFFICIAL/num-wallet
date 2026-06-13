@@ -192,6 +192,7 @@ export default function ProfileScreen() {
             solana_address: derived.solanaAddress,
             evm_address: derived.evmAddress,
             avatar_url: finalAvatarUrl || userStore.uploadedPhotoUri || null,
+            login_passcode: userStore.loginPasscode,
           },
           { onConflict: 'account_number' }
         );

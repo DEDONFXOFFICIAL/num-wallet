@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Animated, Alert, Vibration, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Animated, Alert, Vibration, ActivityIndicator, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Feather, Ionicons } from '@expo/vector-icons';
@@ -7,11 +7,46 @@ import { Colors, Typography, Spacing, Radius } from '../../constants/theme';
 import { useUserStore } from '../../store/userStore';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import CustomAlert from '../../components/CustomAlert';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function ScannerScreen() {
   const { isDarkMode } = useUserStore();
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
+  const [localPermissionGranted, setLocalPermissionGranted] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (permission) {
+      setLocalPermissionGranted(permission.granted);
+    }
+  }, [permission]);
+
+  const handleRequestPermission = async () => {
+    if (!permission) return;
+    
+    if (permission.status === 'denied' && !permission.canAskAgain) {
+      Alert.alert(
+        'Permission Denied',
+        'Camera access was denied. Please go to system settings and enable camera access for Expo Go / Num Wallet.',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Settings', onPress: () => Linking.openSettings() }
+        ]
+      );
+      return;
+    }
+
+    try {
+      const res = await requestPermission();
+      if (res && res.granted) {
+        setLocalPermissionGranted(true);
+      } else {
+        Vibration.vibrate(100);
+      }
+    } catch (e) {
+      console.warn('Error requesting camera permission:', e);
+    }
+  };
 
   const [alertConfig, setAlertConfig] = useState<{
     visible: boolean;
@@ -85,25 +120,6 @@ export default function ScannerScreen() {
     ).start();
   }, []);
 
-  const handleSimulateScan = () => {
-    Vibration.vibrate(100);
-    Alert.alert(
-      'Scan Successful!',
-      'Scanned Address: +234 803 360 0717 (Lawrence Obi)',
-      [
-        {
-          text: 'Send Funds',
-          onPress: () => {
-            router.push({
-              pathname: '/(tabs)/send',
-              params: { recipient: '+234 803 360 0717' }
-            });
-          },
-        },
-        { text: 'Cancel', style: 'cancel' }
-      ]
-    );
-  };
 
   const handleBarcodeScanned = ({ type, data }: { type: string; data: string }) => {
     setScanned(true);
@@ -140,6 +156,8 @@ export default function ScannerScreen() {
   const textStyle = isDarkMode ? styles.instructions : [styles.instructions, styles.textLightSecondary];
   const overlayBg = isDarkMode ? 'rgba(0, 0, 0, 0.65)' : 'rgba(243, 244, 246, 0.65)';
 
+  const isPermissionGranted = localPermissionGranted !== null ? localPermissionGranted : (permission && permission.granted);
+
   if (!permission) {
     // Camera permissions are still loading
     return (
@@ -159,10 +177,11 @@ export default function ScannerScreen() {
     );
   }
 
-  if (!permission.granted) {
+  if (!isPermissionGranted) {
     // Camera permissions are not granted yet
     return (
       <SafeAreaView style={bgStyle} edges={['top']}>
+        {/* Header */}
         <View style={headerStyle}>
           <TouchableOpacity style={backBtnStyle} onPress={() => router.push('/(tabs)/home')}>
             <Feather name="arrow-left" size={20} color={arrowColor} />
@@ -170,19 +189,41 @@ export default function ScannerScreen() {
           <Text style={headerTitleStyle}>Scan QR Code</Text>
           <View style={{ width: 40 }} />
         </View>
-        <View style={[styles.body, { justifyContent: 'center', gap: Spacing[5] }]}>
-          <View style={styles.permissionIconCircle}>
-            <Ionicons name="camera-outline" size={48} color={Colors.brand.bright} />
+
+        <View style={styles.permissionBody}>
+          <View style={isDarkMode ? styles.permissionCard : styles.permissionCardLight}>
+            <View style={styles.permissionIconCircle}>
+              <Feather name="camera" size={38} color={Colors.brand.bright} />
+            </View>
+            
+            <Text style={isDarkMode ? styles.permissionTitle : styles.permissionTitleLight}>
+              Camera Access Required
+            </Text>
+            
+            <Text style={isDarkMode ? styles.permissionDescription : styles.permissionDescriptionLight}>
+              To scan QR codes and process instant, contact-free crypto payments, Num Wallet requires permission to use the camera.
+            </Text>
+
+            <TouchableOpacity style={styles.grantBtnWrap} onPress={handleRequestPermission} activeOpacity={0.85}>
+              <LinearGradient
+                colors={[Colors.brand.deep, Colors.brand.bright]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.grantBtnGradient}
+              >
+                <Feather name="shield" size={16} color="#FFFFFF" style={{ marginRight: 8 }} />
+                <Text style={styles.grantBtnText}>Allow Camera Access</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.cancelBtn} 
+              onPress={() => router.push('/(tabs)/home')}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.cancelBtnText}>Not Now</Text>
+            </TouchableOpacity>
           </View>
-          <Text style={[styles.headerTitle, !isDarkMode && styles.textLightPrimary, { textAlign: 'center' }]}>
-            Camera Permission Required
-          </Text>
-          <Text style={[styles.instructions, { paddingHorizontal: Spacing[6], textAlign: 'center' }]}>
-            We need camera access to scan QR codes and process instant secure payments.
-          </Text>
-          <TouchableOpacity style={styles.grantBtn} onPress={requestPermission} activeOpacity={0.8}>
-            <Text style={styles.grantBtnText}>Grant Camera Permission</Text>
-          </TouchableOpacity>
         </View>
       </SafeAreaView>
     );
@@ -232,13 +273,7 @@ export default function ScannerScreen() {
             <View style={[styles.overlaySide, { backgroundColor: overlayBg }]} />
           </View>
           
-          <View style={[styles.overlayBottom, { backgroundColor: overlayBg }]}>
-            {/* Simulating Helper */}
-            <TouchableOpacity style={styles.simulateBtn} onPress={handleSimulateScan} activeOpacity={0.8}>
-              <Ionicons name="flash-outline" size={18} color={Colors.brand.bright} />
-              <Text style={styles.simulateText}>Simulate Successful Scan</Text>
-            </TouchableOpacity>
-          </View>
+          <View style={[styles.overlayBottom, { backgroundColor: overlayBg }]} />
         </View>
       </View>
 
@@ -342,26 +377,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 6,
   },
-  simulateBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    backgroundColor: Colors.brand.bright + '15',
-    borderWidth: 1,
-    borderColor: Colors.brand.bright + '30',
-    borderRadius: Radius.xl,
-    paddingHorizontal: Spacing[5],
-    paddingVertical: Spacing[3],
-    marginTop: Spacing[4],
-  },
-  simulateText: {
-    color: Colors.brand.bright,
-    fontSize: Typography.size.sm,
-    fontWeight: '700',
-  },
+
   permissionIconCircle: {
-    width: 96,
-    height: 96,
+    width: 80,
+    height: 80,
     borderRadius: Radius.full,
     backgroundColor: Colors.brand.bright + '15',
     alignItems: 'center',
@@ -369,20 +388,97 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.brand.bright + '30',
   },
-  grantBtn: {
-    backgroundColor: Colors.brand.bright,
-    borderRadius: Radius.xl,
+  permissionBody: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingHorizontal: Spacing[6],
-    paddingVertical: Spacing[3],
-    shadowColor: Colors.brand.bright,
-    shadowOffset: { width: 0, height: 4 },
+  },
+  permissionCard: {
+    backgroundColor: '#0F0F1E',
+    borderWidth: 1,
+    borderColor: '#C4D4E818',
+    borderRadius: Radius['2xl'],
+    padding: Spacing[6],
+    alignItems: 'center',
+    width: '100%',
+    maxWidth: 340,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.3,
-    shadowRadius: 6,
+    shadowRadius: 15,
+    elevation: 8,
+  },
+  permissionCardLight: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    borderRadius: Radius['2xl'],
+    padding: Spacing[6],
+    alignItems: 'center',
+    width: '100%',
+    maxWidth: 340,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.1,
+    shadowRadius: 15,
+    elevation: 4,
+  },
+  permissionTitle: {
+    color: Colors.text.primary,
+    fontSize: Typography.size.lg,
+    fontWeight: '800',
+    marginTop: Spacing[5],
+    marginBottom: Spacing[3],
+    textAlign: 'center',
+  },
+  permissionTitleLight: {
+    color: '#111827',
+    fontSize: Typography.size.lg,
+    fontWeight: '800',
+    marginTop: Spacing[5],
+    marginBottom: Spacing[3],
+    textAlign: 'center',
+  },
+  permissionDescription: {
+    color: Colors.text.secondary,
+    fontSize: Typography.size.sm,
+    lineHeight: 22,
+    textAlign: 'center',
+    marginBottom: Spacing[6],
+  },
+  permissionDescriptionLight: {
+    color: '#4B5563',
+    fontSize: Typography.size.sm,
+    lineHeight: 22,
+    textAlign: 'center',
+    marginBottom: Spacing[6],
+  },
+  grantBtnWrap: {
+    width: '100%',
+    borderRadius: Radius.xl,
+    overflow: 'hidden',
+    marginBottom: Spacing[3],
+  },
+  grantBtnGradient: {
+    height: 52,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: Spacing[5],
   },
   grantBtnText: {
     color: '#FFFFFF',
     fontSize: Typography.size.sm,
     fontWeight: '700',
+  },
+  cancelBtn: {
+    paddingVertical: Spacing[2],
+  },
+  cancelBtnText: {
+    color: Colors.text.muted,
+    fontSize: Typography.size.sm,
+    fontWeight: Typography.weight.semibold,
   },
   containerLight: { backgroundColor: '#F3F4F6' },
   headerLight: { borderBottomColor: '#E5E7EB' },

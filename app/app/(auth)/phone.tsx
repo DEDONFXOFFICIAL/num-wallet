@@ -286,6 +286,65 @@ export default function PhoneScreen() {
   const [loading, setLoading] = useState(false);
   const buttonText = mode === 'login' ? 'Login' : 'Send OTP';
 
+  const handleForgotPasscode = async () => {
+    if (!isPhoneValid) {
+      Alert.alert('Phone Number Required', 'Please enter your registered phone number first to request a passcode reset.');
+      return;
+    }
+    setLoading(true);
+    const fullPhone = selected.code + ' ' + phone;
+    const cleanNum = phone.replace(/^0/, '');
+
+    // 1. Verify that the number exists in the database
+    try {
+      const { data, error } = await supabase
+        .from('registries')
+        .select('account_number')
+        .eq('account_number', cleanNum)
+        .maybeSingle();
+
+      if (error || !data) {
+        setLoading(false);
+        Alert.alert('Account Not Found', 'No registered account was found for this phone number.');
+        return;
+      }
+    } catch (err) {
+      setLoading(false);
+      Alert.alert('Error', 'An error occurred while checking account status. Please try again.');
+      return;
+    }
+
+    // 2. Dispatch OTP to the phone number
+    const result = await SmsService.sendOtp(fullPhone);
+    setLoading(false);
+
+    if (result.success) {
+      // Save original account number to state
+      useUserStore.getState().setAccountNumber(cleanNum);
+      
+      Alert.alert(
+        'Verification Code Sent',
+        'A 6-digit verification code has been sent to confirm ownership of the registered phone number.',
+        [
+          {
+            text: 'Verify Now',
+            onPress: () => {
+              router.push({
+                pathname: '/(auth)/otp',
+                params: {
+                  phone: fullPhone,
+                  mode: 'reset_passcode'
+                }
+              });
+            }
+          }
+        ]
+      );
+    } else {
+      Alert.alert('SMS Dispatch Failed', result.error || 'Failed to send SMS verification code.');
+    }
+  };
+
   const handleContinue = async () => {
     if (!isValid || loading) return;
     setLoading(true);
@@ -294,15 +353,17 @@ export default function PhoneScreen() {
 
     // 1. Check account registration status in Supabase registries database
     let isAlreadyRegistered = false;
+    let dbPasscode = null;
     try {
       const { data, error } = await supabase
         .from('registries')
-        .select('account_number')
+        .select('account_number, login_passcode')
         .eq('account_number', cleanNum)
         .maybeSingle();
 
       if (!error && data) {
         isAlreadyRegistered = true;
+        dbPasscode = data.login_passcode;
       }
     } catch (err) {
       console.warn('Error checking registry existence in Supabase:', err);
@@ -348,13 +409,19 @@ export default function PhoneScreen() {
       return;
     }
 
-    // 3. For Sign In mode, validate entered passcode key against local user store before OTP check
+    // 3. For Sign In mode, validate entered passcode key against database registry record before OTP check
     if (mode === 'login') {
-      const savedPasscode = useUserStore.getState().loginPasscode;
+      const store = useUserStore.getState();
+      const savedPasscode = dbPasscode || store.loginPasscode || '123456';
       if (passcode !== savedPasscode) {
         setLoading(false);
         Alert.alert('Incorrect Passcode', 'The login key passcode you entered is incorrect. Please try again.');
         return;
+      }
+      // Self-heal: Restore passcode and default pin in state if they were cleared during cache reset
+      store.setLoginPasscode(passcode);
+      if (!store.transactionPin) {
+        store.setTransactionPin('1234');
       }
     }
 
@@ -507,6 +574,14 @@ export default function PhoneScreen() {
                   />
                 </TouchableOpacity>
               </View>
+
+              <TouchableOpacity
+                onPress={handleForgotPasscode}
+                style={styles.forgotBtn}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.forgotBtnText}>Forgot Passcode?</Text>
+              </TouchableOpacity>
             </View>
           )}
 
@@ -809,5 +884,16 @@ const styles = StyleSheet.create({
   },
   termsLink: {
     color: Colors.brand.bright,
+  },
+  forgotBtn: {
+    paddingVertical: Spacing[2],
+    marginTop: Spacing[2],
+    alignSelf: 'flex-start',
+  },
+  forgotBtnText: {
+    color: Colors.brand.bright,
+    fontSize: Typography.size.sm,
+    fontWeight: Typography.weight.bold,
+    textDecorationLine: 'underline',
   },
 });

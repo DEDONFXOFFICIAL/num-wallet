@@ -5,13 +5,13 @@
  * In development, create an app/.env file with these keys.
  */
 export const Config = {
-  SUPABASE_URL: process.env.EXPO_PUBLIC_SUPABASE_URL || 'https://giznbbrfbnsxflfsmefr.supabase.co',
-  SUPABASE_ANON_KEY: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdpem5iYnJmYm5zeGZsZnNtZWZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0MDE3MTcsImV4cCI6MjA5NTk3NzcxN30.4hTLxGLqCYoPElYSv0ewKQx9GW49pgthzKe3Mvcd0qY',
+  SUPABASE_URL: process.env.EXPO_PUBLIC_SUPABASE_URL || '',
+  SUPABASE_ANON_KEY: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '',
 
   // --- Privy MPC Config ---
   // Sourced from: Privy Developer Dashboard (embedded wallets enabled)
-  PRIVY_APP_ID: process.env.EXPO_PUBLIC_PRIVY_APP_ID || 'cmpwophid000r0djp5d9wqxv5',
-  PRIVY_CLIENT_ID: process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID || 'client-WY6Zbde9pCMefM8FKcarAgsEfeMtPgHWWdhUk2FXY91Uk',
+  PRIVY_APP_ID: process.env.EXPO_PUBLIC_PRIVY_APP_ID || '',
+  PRIVY_CLIENT_ID: process.env.EXPO_PUBLIC_PRIVY_CLIENT_ID || '',
 
   // --- Global Twilio SMS Config ---
   // Sourced from: Twilio Console
@@ -20,8 +20,8 @@ export const Config = {
   TWILIO_MESSAGING_SERVICE_SID: process.env.EXPO_PUBLIC_TWILIO_MESSAGING_SERVICE_SID || '',
 
   // --- Blockchain RPC Nodes (Mainnet Production) ---
-  SOLANA_RPC_URL: process.env.EXPO_PUBLIC_SOLANA_RPC_URL || 'https://mainnet.helius-rpc.com/?api-key=885ec26a-ce0c-4295-be91-d98702b14db5',
-  EVM_RPC_URL: process.env.EXPO_PUBLIC_EVM_RPC_URL || 'https://rpc.ankr.com/eth',
+  SOLANA_RPC_URL: process.env.EXPO_PUBLIC_SOLANA_RPC_URL || '',
+  EVM_RPC_URL: process.env.EXPO_PUBLIC_EVM_RPC_URL || '',
 
   // --- Resend Email Config (Platform Automated Emails) ---
   // Sourced from: resend.com

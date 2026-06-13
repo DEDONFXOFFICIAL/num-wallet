@@ -108,7 +108,7 @@ const BLOCKCHAINS_LIST = [
     id: 'near',
     name: 'Near',
     logos: ['https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/near/info/logo.png'],
-    address: 'lawrence.near',
+    address: '',
     type: 'non-evm',
     isEvmGroup: false,
     note: 'Receive NEAR and Near Protocol assets.'
@@ -139,7 +139,7 @@ export default function ReceiveScreen() {
     sui: '0x6e3bc01b5145b23d9b43efcd9c09c2182049efab3',
     aptos: '0x43efcd9c09c2182049efac9',
     tron: 'TY5scs7l8scs7l5scs7l8scs7l9scs7l8scs',
-    near: 'lawrence.near',
+    near: '',
     klever: 'klv1xy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh'
   });
 
@@ -252,23 +252,11 @@ export default function ReceiveScreen() {
             <View style={[styles.qrCodeBorder, !isDarkMode && styles.qrBorderLight]}>
               <View style={styles.qrCodeInner}>
                 <View style={styles.qrGrid}>
-                  {/* Corner Markers */}
-                  <View style={[styles.qrMarker, { top: 0, left: 0 }]} />
-                  <View style={[styles.qrMarker, { top: 0, right: 0 }]} />
-                  <View style={[styles.qrMarker, { bottom: 0, left: 0 }]} />
-                  <View style={[styles.qrMarker, { bottom: 8, right: 8, width: 12, height: 12, borderWidth: 3 }]} />
-
-                  {/* QR Lines */}
-                  <View style={styles.qrGridLines}>
-                    <View style={[styles.qrGridDot, { top: 40, left: 40, width: 50 }]} />
-                    <View style={[styles.qrGridDot, { top: 55, left: 20, width: 80 }]} />
-                    <View style={[styles.qrGridDot, { top: 70, left: 50, width: 40 }]} />
-                    <View style={[styles.qrGridDot, { top: 85, left: 10, width: 90 }]} />
-                    <View style={[styles.qrGridDot, { top: 100, left: 60, width: 60 }]} />
-                    <View style={[styles.qrGridDot, { top: 115, left: 20, width: 40 }]} />
-                    <View style={[styles.qrGridDot, { top: 130, left: 30, width: 80 }]} />
-                  </View>
-
+                  <Image
+                    source={{ uri: `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(cleanAccountNumber)}&color=000000&bgcolor=ffffff&qzone=1` }}
+                    style={{ width: '100%', height: '100%', borderRadius: Radius.sm }}
+                    resizeMode="contain"
+                  />
                   {/* Center badge */}
                   <View style={styles.qrCenterBadge}>
                     <Image
@@ -402,16 +390,11 @@ export default function ReceiveScreen() {
                         <View style={[styles.smallQrBorder, !isDarkMode && styles.qrBorderLight]}>
                           <View style={styles.smallQrInner}>
                             <View style={styles.qrGrid}>
-                              <View style={[styles.qrMarker, { width: 18, height: 18, borderWidth: 3 }]} />
-                              <View style={[styles.qrMarker, { top: 0, right: 0, width: 18, height: 18, borderWidth: 3 }]} />
-                              <View style={[styles.qrMarker, { bottom: 0, left: 0, width: 18, height: 18, borderWidth: 3 }]} />
-                              <View style={styles.qrGridLines}>
-                                <View style={[styles.qrGridDot, { top: 25, left: 25, width: 30 }]} />
-                                <View style={[styles.qrGridDot, { top: 35, left: 15, width: 50 }]} />
-                                <View style={[styles.qrGridDot, { top: 45, left: 35, width: 25 }]} />
-                                <View style={[styles.qrGridDot, { top: 55, left: 10, width: 60 }]} />
-                                <View style={[styles.qrGridDot, { top: 65, left: 40, width: 35 }]} />
-                              </View>
+                              <Image
+                                source={{ uri: `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(actualAddress)}&color=000000&bgcolor=ffffff&qzone=1` }}
+                                style={{ width: '100%', height: '100%', borderRadius: Radius.xs }}
+                                resizeMode="contain"
+                              />
                             </View>
                           </View>
                         </View>
@@ -571,7 +554,7 @@ const styles = StyleSheet.create({
   qrCodeInner: {
     width: 154,
     height: 154,
-    backgroundColor: '#000000',
+    backgroundColor: '#FFFFFF',
     borderRadius: Radius.md,
     padding: 10,
   },
@@ -604,7 +587,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 32,
     height: 32,
-    backgroundColor: '#000000',
+    backgroundColor: '#FFFFFF',
     borderRadius: Radius.sm,
     borderWidth: 2,
     borderColor: Colors.brand.bright,
@@ -780,7 +763,7 @@ const styles = StyleSheet.create({
   smallQrInner: {
     width: 84,
     height: 84,
-    backgroundColor: '#000000',
+    backgroundColor: '#FFFFFF',
     borderRadius: Radius.sm,
     padding: 6,
   },

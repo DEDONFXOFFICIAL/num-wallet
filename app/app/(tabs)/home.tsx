@@ -107,14 +107,6 @@ const AVATARS_CONFIG = [
   { id: '5', icon: 'shield' as const, color: '#F59E0B', bg: '#F59E0B20' },
 ];
 
-// ── Mock data ─────────────────────────────────────────────────────────────────
-const USER = {
-  name: 'Lawrence',
-  accountNumber: '8033600717',
-  cryptoBalance: '$0.00',
-  bankBalance: '₦0.00',
-};
-
 
 const ACTION_BUTTONS = [
   { id: 'send', label: 'Send', icon: 'arrow-up' as const, color: Colors.brand.bright, bg: Colors.brand.bright + '15' },

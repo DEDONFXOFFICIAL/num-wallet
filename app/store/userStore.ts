@@ -278,14 +278,14 @@ export const INITIAL_TOP20_PORTFOLIO = [
 export const useUserStore = create<UserState>()(
   persist(
     (set) => ({
-      name: 'Lawrence',
+      name: '',
       selectedAvatarId: null,
       uploadedPhoto: false,
       uploadedPhotoUri: null,
       biometricsEnabled: false,
       isDarkMode: true,
       isBalanceVisible: true,
-      accountNumber: '8033600717',
+      accountNumber: '',
       showNfts: true,
       showStake: true,
       showPerps: true,
@@ -433,7 +433,7 @@ export const useUserStore = create<UserState>()(
     {
       name: 'num-wallet-user-store',
       storage: createJSONStorage(() => AsyncStorage),
-      version: 6,
+      version: 7,
       migrate: (persistedState: any, version: number) => {
         const state = persistedState as any;
         if (version < 2) {
@@ -509,6 +509,16 @@ export const useUserStore = create<UserState>()(
           if (state) {
             state.biometricLockSetting = 'none';
             state.lastAppClosedAt = null;
+          }
+        }
+        if (version < 7) {
+          if (state) {
+            if (state.name === 'Lawrence' || state.accountNumber === '8033600717') {
+              state.name = '';
+              state.accountNumber = '';
+              state.loginPasscode = '123456';
+              state.transactionPin = '1234';
+            }
           }
         }
         return persistedState;

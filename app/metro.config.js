@@ -26,32 +26,42 @@ if (process.env.EAS_BUILD_PROFILE === 'production') {
         return result;
       }
 
-      let code = typeof result === 'string' ? result : result.code;
-
       const JavaScriptObfuscator = require('javascript-obfuscator');
-      const obfuscated = JavaScriptObfuscator.obfuscate(code, {
+      const obfuscationOptions = {
         compact: true,
-        controlFlowFlattening: true,
-        controlFlowFlatteningThreshold: 0.5,
-        deadCodeInjection: true,
-        deadCodeInjectionThreshold: 0.3,
+        controlFlowFlattening: false,
+        deadCodeInjection: false,
         identifierNamesGenerator: 'hexadecimal',
         renameGlobals: false,
-        stringArray: true,
-        stringArrayEncoding: ['base64'],
-        stringArrayThreshold: 0.8,
-        numbersToExpressions: true,
+        stringArray: false,
+        numbersToExpressions: false,
         simplify: true,
-      });
-
-      const obfuscatedCode = obfuscated.getObfuscatedCode();
-      if (typeof result === 'string') {
-        return obfuscatedCode;
-      }
-      return {
-        ...result,
-        code: obfuscatedCode,
       };
+
+      if (typeof result === 'string') {
+        const obfuscated = JavaScriptObfuscator.obfuscate(result, obfuscationOptions);
+        return obfuscated.getObfuscatedCode();
+      }
+
+      if (result && typeof result === 'object') {
+        // Obfuscate top-level result.code if present
+        if (typeof result.code === 'string') {
+          const obfuscated = JavaScriptObfuscator.obfuscate(result.code, obfuscationOptions);
+          result.code = obfuscated.getObfuscatedCode();
+        }
+
+        // Obfuscate js artifacts if present
+        if (Array.isArray(result.artifacts)) {
+          for (const art of result.artifacts) {
+            if (art && art.type === 'js' && typeof art.source === 'string') {
+              const obfuscated = JavaScriptObfuscator.obfuscate(art.source, obfuscationOptions);
+              art.source = obfuscated.getObfuscatedCode();
+            }
+          }
+        }
+      }
+
+      return result;
     }
   };
 }

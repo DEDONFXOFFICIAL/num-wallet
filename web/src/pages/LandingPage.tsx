@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { 
   Shield, Key, Cpu, Zap, Download, ExternalLink, 
   Terminal, Sun, Moon, HelpCircle,
-  Phone, Mail, Lock, Star,
-  RefreshCw, Shuffle, Image, EyeOff, Bell
+  Phone, Lock, Star,
+  RefreshCw, Shuffle, Image, EyeOff
 } from 'lucide-react';
 import { Glass3DCanvas } from '../components/Glass3DCanvas';
 
@@ -287,9 +287,9 @@ export default function LandingPage() {
                 <Phone size={24} />
               </div>
               <div className="step-body">
-                <h3>Link Phone Number</h3>
+                <h3>Input Phone Number</h3>
                 <p>
-                  Sign up in seconds. Your 10-digit phone number serves as a permanent routing identity, mapped securely to decentralized on-chain addresses under the hood.
+                  Enter your 10-digit mobile number to begin the onboarding process. This becomes your permanent routing identity.
                 </p>
               </div>
             </div>
@@ -297,12 +297,12 @@ export default function LandingPage() {
             <div className="step-card">
               <span className="step-badge">STEP 02</span>
               <div className="step-icon-wrap">
-                <Key size={24} />
+                <Lock size={24} />
               </div>
               <div className="step-body">
-                <h3>Gmail Backup Setup</h3>
+                <h3>Receive OTP</h3>
                 <p>
-                  Authorise backup security via Gmail integration. This configures the backup routing system to tie recovery metadata to your personal email.
+                  Verify your phone number instantly using the secure One-Time Password (OTP) sent directly to your device.
                 </p>
               </div>
             </div>
@@ -310,38 +310,12 @@ export default function LandingPage() {
             <div className="step-card">
               <span className="step-badge">STEP 03</span>
               <div className="step-icon-wrap">
-                <Mail size={24} />
+                <Shield size={24} />
               </div>
               <div className="step-body">
-                <h3>Automated Keystore Mail</h3>
+                <h3>Add Your Name</h3>
                 <p>
-                  Num Wallet automatically triggers a background email containing a custom encrypted HTML keystore file to your Gmail backup inbox.
-                </p>
-              </div>
-            </div>
-
-            <div className="step-card">
-              <span className="step-badge">STEP 04</span>
-              <div className="step-icon-wrap">
-                <Lock size={24} />
-              </div>
-              <div className="step-body">
-                <h3>Offline PIN Decryption</h3>
-                <p>
-                  Open the HTML file in any browser offline, input your 4-digit account security PIN, and decrypt your seed phrase safely to copy or migrate.
-                </p>
-              </div>
-            </div>
-
-            <div className="step-card">
-              <span className="step-badge">STEP 05</span>
-              <div className="step-icon-wrap">
-                <RefreshCw size={24} />
-              </div>
-              <div className="step-body">
-                <h3>Wallet Regeneration</h3>
-                <p>
-                  In case of compromise, trigger regeneration from settings. Wipes old keys, creates a new seed phrase, maps it to your phone, and emails a fresh backup.
+                  Input your name or username to complete the registration process and create your smart wallet profile.
                 </p>
               </div>
             </div>
@@ -358,7 +332,7 @@ export default function LandingPage() {
               <div className="step-body">
                 <h3>Input Phone Number</h3>
                 <p>
-                  Enter any 10-digit phone number in the destination field. There is no need for complex public keys, country prefix codes, or hex addresses.
+                  Enter the recipient's phone number or choose from your contacts. No need to copy or paste complex public wallet addresses.
                 </p>
               </div>
             </div>
@@ -366,12 +340,12 @@ export default function LandingPage() {
             <div className="step-card">
               <span className="step-badge">STEP 02</span>
               <div className="step-icon-wrap">
-                <Cpu size={24} />
+                <Zap size={24} />
               </div>
               <div className="step-body">
-                <h3>Instant Address Routing</h3>
+                <h3>Enter Amount</h3>
                 <p>
-                  The provider automatically resolves the phone number behind the scenes, securely mapping it to the correct blockchain address in real-time.
+                  Specify the exact amount of funds or value that you wish to send to the recipient.
                 </p>
               </div>
             </div>
@@ -379,25 +353,12 @@ export default function LandingPage() {
             <div className="step-card">
               <span className="step-badge">STEP 03</span>
               <div className="step-icon-wrap">
-                <Shield size={24} />
+                <RefreshCw size={24} />
               </div>
               <div className="step-body">
-                <h3>Visual Confirmation</h3>
+                <h3>Select Coin or Token</h3>
                 <p>
-                  Verify the recipient's avatar and username visually on the confirmation screen before authorizing the transfer of assets.
-                </p>
-              </div>
-            </div>
-
-            <div className="step-card">
-              <span className="step-badge">STEP 04</span>
-              <div className="step-icon-wrap">
-                <Bell size={24} />
-              </div>
-              <div className="step-body">
-                <h3>Immediate Notification</h3>
-                <p>
-                  Funds are sent directly wallet-to-wallet on-chain, and the recipient receives an instant push notification of the incoming transfer.
+                  Choose the specific cryptocurrency, asset, or token you want the transfer to be completed in.
                 </p>
               </div>
             </div>
@@ -412,9 +373,9 @@ export default function LandingPage() {
                 <RefreshCw size={24} />
               </div>
               <div className="step-body">
-                <h3>Multi-Chain Swap</h3>
+                <h3>Swap</h3>
                 <p>
-                  Choose from 100+ tokens. The Convert engine queries Jupiter and EVM aggregates to swap tokens with optimal routing and minimal slippage.
+                  Convert between different tokens on the same network instantly with optimal routing and minimal slippage.
                 </p>
               </div>
             </div>
@@ -425,9 +386,9 @@ export default function LandingPage() {
                 <Shuffle size={24} />
               </div>
               <div className="step-body">
-                <h3>Network Bridging</h3>
+                <h3>Bridge</h3>
                 <p>
-                  Bridge assets across distinct blockchains seamlessly. Integrations with Wormhole and deBridge protocols handle multi-hop cross-chain transfers.
+                  Move your digital assets across distinct blockchains securely using integrated top-tier bridging protocols.
                 </p>
               </div>
             </div>
@@ -435,12 +396,12 @@ export default function LandingPage() {
             <div className="step-card">
               <span className="step-badge">STEP 03</span>
               <div className="step-icon-wrap">
-                <Zap size={24} />
+                <Cpu size={24} />
               </div>
               <div className="step-body">
-                <h3>Consolidated USD Fee</h3>
+                <h3>Multi-Chain Swap</h3>
                 <p>
-                  Instead of paying separate platform and complex gas fees, all conversion costs are combined into a single, transparent USD figure shown upfront.
+                  Perform cross-chain swaps to convert and transfer assets between different networks in a single transaction.
                 </p>
               </div>
             </div>
@@ -457,7 +418,7 @@ export default function LandingPage() {
               <div className="step-body">
                 <h3>Multi-Chain Aggregation</h3>
                 <p>
-                  Scan your collectibles across EVM and Solana networks concurrently. The portfolio manager aggregates media assets and floor price metadata automatically.
+                  Scan and view your digital collectibles across EVM, Solana, and other networks concurrently in a unified dashboard.
                 </p>
               </div>
             </div>
@@ -468,22 +429,9 @@ export default function LandingPage() {
                 <EyeOff size={24} />
               </div>
               <div className="step-body">
-                <h3>Spam & Airdrop Filtering</h3>
+                <h3>Spam & Airdrop Filters</h3>
                 <p>
-                  Native screening lists automatically filter out copycat tokens, scam airdrop claims, and malicious contract addresses to keep your wallet tidy.
-                </p>
-              </div>
-            </div>
-
-            <div className="step-card">
-              <span className="step-badge">STEP 03</span>
-              <div className="step-icon-wrap">
-                <Zap size={24} />
-              </div>
-              <div className="step-body">
-                <h3>Premium Gallery</h3>
-                <p>
-                  Interact with high-resolution image and video galleries, inspect attributes, view metadata, and manage NFT transfers within a single tab.
+                  Automatically screen out copycat tokens, scam airdrop claims, and malicious contract addresses to keep your collection safe.
                 </p>
               </div>
             </div>

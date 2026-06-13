@@ -81,7 +81,7 @@ interface UserState {
   setLastOtpVerifiedAt: (time: number | null) => void;
   setBiometricLockSetting: (setting: 'none' | 'immediately' | '5m' | '15m' | '30m' | '1h' | '6h' | '24h') => void;
   setLastAppClosedAt: (time: number | null) => void;
-  importCustomAsset: (chainName: string, tokenSymbol: string, tokenName: string, logoUrl?: string, address?: string, decimals?: number, price?: number, chainLogoUrl?: string) => void;
+  importCustomAsset: (chainName: string, tokenSymbol: string, tokenName: string, logoUrl?: string, address?: string, decimals?: number, price?: number, chainLogoUrl?: string, initialAmount?: string | number) => void;
   clearPortfolio: () => void;
   addTransaction: (tx: Omit<TransactionType, 'id' | 'date'>) => void;
   clearTransactionHistory: () => void;
@@ -343,19 +343,20 @@ export const useUserStore = create<UserState>()(
       setLastOtpVerifiedAt: (lastOtpVerifiedAt) => set({ lastOtpVerifiedAt }),
       setBiometricLockSetting: (biometricLockSetting) => set({ biometricLockSetting }),
       setLastAppClosedAt: (lastAppClosedAt) => set({ lastAppClosedAt }),
-      importCustomAsset: (chainName, tokenSymbol, tokenName, logoUrl, address, decimals, price, chainLogoUrl) => set((state) => {
+      importCustomAsset: (chainName, tokenSymbol, tokenName, logoUrl, address, decimals, price, chainLogoUrl, initialAmount) => set((state) => {
         const chainId = chainName.toLowerCase().replace(/\s+/g, '');
         const existingChain = state.portfolioAssets.find(c => c.id === chainId || c.chain.toLowerCase() === chainName.toLowerCase());
         
         const tokenAddress = address || '';
         const tokenDecimals = decimals !== undefined ? decimals : 18;
         const tokenPrice = price !== undefined ? price : 0;
+        const initAmt = initialAmount !== undefined ? parseFloat(initialAmount.toString()) : 0;
         
         const newToken = {
           symbol: tokenSymbol.toUpperCase(),
           name: tokenName,
-          amount: `0.00 ${tokenSymbol.toUpperCase()}`,
-          value: '$0.00',
+          amount: initialAmount !== undefined ? `${initAmt.toFixed(4)} ${tokenSymbol.toUpperCase()}` : `0.00 ${tokenSymbol.toUpperCase()}`,
+          value: initialAmount !== undefined ? `$${(initAmt * tokenPrice).toFixed(2)}` : '$0.00',
           change: '+0.00%',
           isPositive: true,
           logo: logoUrl || 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',

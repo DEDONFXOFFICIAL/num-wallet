@@ -730,14 +730,14 @@ export const WalletEngine = {
             ]);
             const amtNum = parseFloat(ethers.formatUnits(rawBal, dec));
 
-            if (amtNum > 0) {
-              let pToken = chainObj.tokens.find((t: any) => t.address && t.address.toLowerCase() === token.address.toLowerCase());
-              
-              const details = await fetchTokenDetailsFromLifi(evmId, token.address);
-              let tokenPrice = 0;
-              if (details) {
-                tokenPrice = details.price;
-                if (!pToken) {
+            let pToken = chainObj.tokens.find((t: any) => t.address && t.address.toLowerCase() === token.address.toLowerCase());
+            
+            const details = await fetchTokenDetailsFromLifi(evmId, token.address);
+            let tokenPrice = 0;
+            if (details) {
+              tokenPrice = details.price;
+              if (!pToken) {
+                if (amtNum > 0) {
                   pToken = {
                     symbol: details.symbol,
                     name: details.name,
@@ -751,21 +751,21 @@ export const WalletEngine = {
                     price: details.price
                   };
                   chainObj.tokens.push(pToken);
-                } else {
-                  pToken.price = details.price;
-                  pToken.decimals = details.decimals || pToken.decimals;
-                  pToken.logo = details.logo || pToken.logo;
-                  pToken.symbol = details.symbol || pToken.symbol;
-                  pToken.name = details.name || pToken.name;
                 }
-              } else if (pToken) {
-                tokenPrice = pToken.price || 0;
+              } else {
+                pToken.price = details.price;
+                pToken.decimals = details.decimals || pToken.decimals;
+                pToken.logo = details.logo || pToken.logo;
+                pToken.symbol = details.symbol || pToken.symbol;
+                pToken.name = details.name || pToken.name;
               }
+            } else if (pToken) {
+              tokenPrice = pToken.price || 0;
+            }
 
-              if (pToken) {
-                pToken.amount = `${amtNum.toFixed(4)} ${pToken.symbol}`;
-                pToken.value = `$${(amtNum * tokenPrice).toFixed(2)}`;
-              }
+            if (pToken) {
+              pToken.amount = `${amtNum.toFixed(4)} ${pToken.symbol}`;
+              pToken.value = `$${(amtNum * tokenPrice).toFixed(2)}`;
             }
           } catch (e) {
             // ignore ERC-20 read error

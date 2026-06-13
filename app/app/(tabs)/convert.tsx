@@ -1785,8 +1785,22 @@ export default function ConvertScreen() {
         // Import tokens to portfolio if needed
         if (receiveToken.address) {
           const alreadyIn = portfolioAssets.some((a: any) => a.tokens.some((t: any) => t.address?.toLowerCase() === receiveToken.address?.toLowerCase()));
-          if (!alreadyIn) importCustomAsset(receiveToken.chain, receiveToken.symbol, receiveToken.name, receiveToken.logo, receiveToken.address, outDecimals, receiveToken.price);
+          if (!alreadyIn) importCustomAsset(receiveToken.chain, receiveToken.symbol, receiveToken.name, receiveToken.logo, receiveToken.address, outDecimals, receiveToken.price, undefined, calculatedReceive);
         }
+
+        // Trigger background update of balances
+        WalletEngine.decryptAndLoadWallet(transactionPin).then(w => {
+          if (w) {
+            WalletEngine.fetchPortfolioBalances(
+              w.solanaAddress,
+              w.evmAddress,
+              useUserStore.getState().portfolioAssets,
+              w.kleverAddress
+            ).then(updated => {
+              useUserStore.setState({ portfolioAssets: updated });
+            }).catch(() => {});
+          }
+        }).catch(() => {});
 
         addTransaction({
           type: operationType,
@@ -2071,7 +2085,9 @@ export default function ConvertScreen() {
             receiveToken.logo,
             receiveToken.address,
             getTokenDecimals(receiveToken),
-            receiveToken.price
+            receiveToken.price,
+            undefined,
+            calculatedReceive
           );
         }
       }
@@ -2092,6 +2108,20 @@ export default function ConvertScreen() {
           );
         }
       }
+
+      // Trigger background update of balances
+      WalletEngine.decryptAndLoadWallet(transactionPin).then(w => {
+        if (w) {
+          WalletEngine.fetchPortfolioBalances(
+            w.solanaAddress,
+            w.evmAddress,
+            useUserStore.getState().portfolioAssets,
+            w.kleverAddress
+          ).then(updated => {
+            useUserStore.setState({ portfolioAssets: updated });
+          }).catch(() => {});
+        }
+      }).catch(() => {});
 
       let txType = operationType;
       if (params.isMemeBuy === 'true') {
